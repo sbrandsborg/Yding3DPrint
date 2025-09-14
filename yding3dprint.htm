@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yding 3D Print - Priser & Beregner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .info-box {
+            margin-top: 20px;
+            padding: 20px;
+            background: #fff3cd;
+            border-left: 5px solid #ffa000;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖨️ Yding 3D Print</h1>
+        <h3>💡 Jeg købte en 3D-printer og har printet i mange timer – nu har jeg ledig kapacitet til at tage ordrer for vores lokale community. Hvis du ikke har knowhow, økonomi eller mulighed for at printe selv, så hjælper jeg gerne! 🎉</h3>
+        <p>📍 Yding Toft 8B, 8752 Østbirk</p>
+        <p>📞 Kontakt: steffen@sbrandsborg.dk</p>
+        <p>🔢 CVR: 42002984</p>
+        <p>💰 MobilePay Box: <strong>8125HG</strong></p>
+        <p>💬 **Jeg foretrækker, at du skriver til mig på Facebook Messenger:** <a href="https://www.facebook.com/messages/t/580122692" target="_blank">Send en besked her</a></p>
+        
+        <h2>💡 Prisberegning</h2>
+        <p>Indtast dit filamentforbrug og printtid for at se din pris.</p>
+        
+        <label>Filamentforbrug (g):</label>
+        <input type="number" id="filament" placeholder="Indtast antal gram">
+        
+        <label>Printtid (timer):</label>
+        <input type="number" id="printtid" placeholder="Indtast printtid i timer">
+        
+        <button onclick="beregnPris()">Beregn Pris</button>
+        
+        <div class="result" id="result"></div>
+        
+        <div class="info-box">
+            <h2>💰 Prisberegner for 3D-print</h2>
+            <p>Hos Yding 3D Print beregner vi prisen for dine 3D-print baseret på materialeforbrug og printtid. Vi ønsker at være 100% gennemsigtige om vores prissætning, så her kan du se præcis, hvordan vi beregner din pris.</p>
+            <ul>
+                <li>🧵 <strong>Filament:</strong> Vi bruger som standard PLA, PLA Matte og PETG-HF.</li>
+                <li>💰 <strong>Filamentpris:</strong> 180,25 DKK/kg (0,18025 DKK/g)</li>
+                <li>⚡ <strong>Strømpris:</strong> 3,00 DKK/kWh</li>
+                <li>🔌 <strong>Printerforbrug:</strong> 100W (0,1 kW) under print</li>
+                <li>📈 <strong>Markup:</strong> 300% (salgpris = cost × 3)</li>
+                <li>⏳ <strong>Minimumspris:</strong> 30,00 DKK</li>
+            </ul>
+            <h3>Sådan beregnes prisen</h3>
+            <ol>
+                <li>Filamentomkostning: Filamentforbrug (g) × 0,18025 DKK/g</li>
+                <li>Strømomkostning: Printtid (timer) × 0,1 kW × 3,00 DKK/kWh</li>
+                <li>Total omkostning = Filament + Strøm</li>
+                <li>Salgspris = Total omkostning × 3 (markup)</li>
+                <li>Endelig pris: Hvis salgsprisen er under 30 DKK, justeres den op til minimumsprisen.</li>
+            </ol>
+            <h3>💡 Eksempel</h3>
+            <ul>
+                <li><strong>Filamentforbrug:</strong> 50 g</li>
+                <li><strong>Printtid:</strong> 2 timer</li>
+                <li><strong>Filamentomkostning:</strong> 50 × 0,18025 = 9,01 DKK</li>
+                <li><strong>Strømomkostning:</strong> 2 × 0,1 × 3,00 = 0,60 DKK</li>
+                <li><strong>Total omkostning:</strong> 9,61 DKK</li>
+                <li><strong>Salgspris:</strong> 9,61 × 3 = 28,83 DKK (justeres til 30 DKK, da det er minimumsprisen).</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        function beregnPris() {
+            let filament = parseFloat(document.getElementById('filament').value) || 0;
+            let printtid = parseFloat(document.getElementById('printtid').value) || 0;
+            
+            let filamentPrisPrGram = 0.18025;
+            let stromPrisPrKWh = 3;
+            let printerForbrugKW = 0.1;
+            let markup = 3;
+            let minPris = 30;
+            
+            let filamentOmkostning = filament * filamentPrisPrGram;
+            let stromOmkostning = printtid * printerForbrugKW * stromPrisPrKWh;
+            let totalOmkostning = filamentOmkostning + stromOmkostning;
+            let salgsPris = totalOmkostning * markup;
+            let endeligPris = Math.max(salgsPris, minPris);
+            
+            document.getElementById('result').innerHTML = `🛒 Din pris: <strong>${endeligPris.toFixed(2)} DKK</strong>`;
+        }
+    </script>
+</body>
+</html>
