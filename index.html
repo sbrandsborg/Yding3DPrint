@@ -1,282 +1,308 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="da">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Yding 3D Print - Priser & Beregner</title>
     <style>
-        :root {
-            --bg-color: #f4f4f4;
-            --text-color: #333;
-            --container-bg: #ffffff;
-            --input-bg: #ffffff;
-            --input-color: #000000;
-            --input-border: #cccccc;
-            --button-bg: #28a745;
-            --button-hover-bg: #218838;
-            --info-bg: #fff3cd;
-            --info-border: #ffa000;
-            --link-color: #1a0dab;
-            --link-hover-color: #0a58ca;
-        }
+      :root {
+        --bg-color: #f4f4f4;
+        --text-color: #333;
+        --container-bg: #ffffff;
+        --input-bg: #ffffff;
+        --input-color: #000000;
+        --input-border: #cccccc;
+        --button-bg: #28a745;
+        --button-hover-bg: #218838;
+        --info-bg: #fff3cd;
+        --info-border: #ffa000;
+        --link-color: #1a0dab;
+        --link-hover-color: #0a58ca;
+      }
 
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            text-align: center;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        text-align: center;
+      }
 
-        .container {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 20px;
-            background: var(--container-bg);
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+      .container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+        background: var(--container-bg);
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
 
-        h1,
-        h2,
-        h3 {
-            color: var(--text-color);
-        }
+      h1,
+      h2,
+      h3 {
+        color: var(--text-color);
+      }
 
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid var(--input-border);
-            border-radius: 5px;
-            font-size: 16px;
-            background-color: var(--input-bg);
-            color: var(--input-color);
-        }
+      input {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid var(--input-border);
+        border-radius: 5px;
+        font-size: 16px;
+        background-color: var(--input-bg);
+        color: var(--input-color);
+      }
 
-        button {
-            background: var(--button-bg);
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            cursor: pointer;
-        }
+      button {
+        background: var(--button-bg);
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 18px;
+        cursor: pointer;
+      }
 
-        button:hover {
-            background: var(--button-hover-bg);
-        }
+      button:hover {
+        background: var(--button-hover-bg);
+      }
 
-        .theme-toggle {
-            float: right;
-        }
+      .theme-toggle {
+        float: right;
+      }
 
-        .result {
-            margin-top: 20px;
-            font-size: 18px;
-            font-weight: bold;
-        }
+      .result {
+        margin-top: 20px;
+        font-size: 18px;
+        font-weight: bold;
+      }
 
-        .info-box {
-            margin-top: 20px;
-            padding: 20px;
-            background: var(--info-bg);
-            border-left: 5px solid var(--info-border);
-            text-align: left;
-        }
+      .info-box {
+        margin-top: 20px;
+        padding: 20px;
+        background: var(--info-bg);
+        border-left: 5px solid var(--info-border);
+        text-align: left;
+      }
 
-        a {
-            color: var(--link-color);
-            text-decoration: underline;
-        }
+      a {
+        color: var(--link-color);
+        text-decoration: underline;
+      }
 
-        a:hover {
-            color: var(--link-hover-color);
-        }
+      a:hover {
+        color: var(--link-hover-color);
+      }
 
-        .icon {
-            width: 20px;
-            height: 20px;
-            vertical-align: middle;
-            margin-right: 5px;
-        }
+      .icon {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+        margin-right: 5px;
+      }
 
-        body.dark {
-            --bg-color: #121212;
-            --text-color: #eeeeee;
-            --container-bg: #1e1e1e;
-            --input-bg: #333333;
-            --input-color: #eeeeee;
-            --input-border: #555555;
-            --button-bg: #3a9d64;
-            --button-hover-bg: #2d7d51;
-            --info-bg: #333333;
-            --info-border: #ffa000;
-            --link-color: #82cfff;
-            --link-hover-color: #58a6ff;
-        }
+      body.dark {
+        --bg-color: #121212;
+        --text-color: #eeeeee;
+        --container-bg: #1e1e1e;
+        --input-bg: #333333;
+        --input-color: #eeeeee;
+        --input-border: #555555;
+        --button-bg: #3a9d64;
+        --button-hover-bg: #2d7d51;
+        --info-bg: #333333;
+        --info-border: #ffa000;
+        --link-color: #82cfff;
+        --link-hover-color: #58a6ff;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <button id="themeToggle" class="theme-toggle"></button>
-        <h1>🖨️ Yding 3D Print</h1>
-        <h3>💡 Jeg købte en 3D printer og har printet i mange timer – nu har jeg ledig kapacitet til at tage ordrer for det lokale community. Hvis du ikke har knowhow, økonomi eller mulighed for at printe selv, så hjælper jeg gerne! 🎉</h3>
-        <p>📍 Yding Toft 8B, 8752 Østbirk</p>
-        <p>📞 Kontakt: steffen@sbrandsborg.dk</p>
-        <p>🔢 CVR: 42002984</p>
-        <p>💰 MobilePay Box: <strong>8125HG</strong></p>
-          <p>💬 <strong>Jeg foretrækker, at du skriver til mig på Facebook Messenger:</strong>
-              <a href="https://www.facebook.com/messages/t/580122692" target="_blank">
-                  <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                      <title>Messenger</title>
-                      <path d="M12 0C5.37 0 0 4.98 0 11.11c0 3.5 1.67 6.6 4.28 8.62v4.27l3.9-2.14c1.15.32 2.38.49 3.82.49 6.63 0 12-4.98 12-11.11S18.63 0 12 0zm1.19 14.94l-3.2-3.43-6.22 3.43 6.66-7.08 3.25 3.43 6.18-3.43-6.67 7.08z"/>
-                  </svg>
-                  Send en besked her
-              </a>
-          </p>
-          <p>🔗 Links:
-              <a href="https://www.instagram.com/yding3dprint/" target="_blank" aria-label="Instagram">
-                  <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                      <title>Instagram</title>
-                      <path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm10 2c1.7 0 3 1.3 3 3v10c0 1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3V7c0-1.7 1.3-3 3-3h10zm-5 3.5A4.5 4.5 0 1 0 16.5 12 4.5 4.5 0 0 0 12 7.5zm0 7A2.5 2.5 0 1 1 14.5 12 2.5 2.5 0 0 1 12 14.5zm4.8-7.7a1 1 0 1 1-1-1 1 1 0 0 1 1 1z"/>
-                  </svg>
-              </a>
-              <a href="https://www.facebook.com/messages/t/580122692" target="_blank" aria-label="Messenger">
-                  <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                      <title>Messenger</title>
-                      <path d="M12 0C5.37 0 0 4.98 0 11.11c0 3.5 1.67 6.6 4.28 8.62v4.27l3.9-2.14c1.15.32 2.38.49 3.82.49 6.63 0 12-4.98 12-11.11S18.63 0 12 0zm1.19 14.94l-3.2-3.43-6.22 3.43 6.66-7.08 3.25 3.43 6.18-3.43-6.67 7.08z"/>
-                  </svg>
-              </a>
-          </p>
+      <button id="themeToggle" class="theme-toggle"></button>
+      <h1>🖨️ Yding 3D Print</h1>
+      <h3>
+        💡 Jeg købte en 3D printer og har printet i mange timer – nu har jeg
+        ledig kapacitet til at tage ordrer for det lokale community. Hvis du
+        ikke har knowhow, økonomi eller mulighed for at printe selv, så hjælper
+        jeg gerne! 🎉
+      </h3>
+      <p>📍 Yding Toft 8B, 8752 Østbirk</p>
+      <p>📞 Kontakt: steffen@sbrandsborg.dk</p>
+      <p>🔢 CVR: 42002984</p>
+      <p>💰 MobilePay Box: <strong>8125HG</strong></p>
+      <p>
+        💬
+        <strong
+          >Jeg foretrækker, at du skriver til mig på Facebook Messenger:</strong
+        ><!-- prettier-ignore --><a href="https://www.facebook.com/messages/t/580122692" target="_blank"><svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><title>Messenger</title><path fill="#00B2FF" d="M12 0C5.37 0 0 4.98 0 11.11c0 3.5 1.67 6.6 4.28 8.62v4.27l3.9-2.14c1.15.32 2.38.49 3.82.49 6.63 0 12-4.98 12-11.11S18.63 0 12 0zm1.19 14.94l-3.2-3.43-6.22 3.43 6.66-7.08 3.25 3.43 6.18-3.43-6.67 7.08z"/></svg>Send en besked her</a>
+      </p>
+      <p>
+        🔗 Links:<!-- prettier-ignore --><a href="https://www.instagram.com/yding3dprint/" target="_blank" aria-label="Instagram"><svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><title>Instagram</title><path fill="#E4405F" d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm10 2c1.7 0 3 1.3 3 3v10c0 1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3V7c0-1.7 1.3-3 3-3h10zm-5 3.5A4.5 4.5 0 1 0 16.5 12 4.5 4.5 0 0 0 12 7.5zm0 7A2.5 2.5 0 1 1 14.5 12 2.5 2.5 0 0 1 12 14.5zm4.8-7.7a1 1 0 1 1-1-1 1 1 0 0 1 1 1z"/></svg></a
+        ><!-- prettier-ignore --><a href="https://www.facebook.com/messages/t/580122692" target="_blank" aria-label="Messenger"><svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><title>Messenger</title><path fill="#00B2FF" d="M12 0C5.37 0 0 4.98 0 11.11c0 3.5 1.67 6.6 4.28 8.62v4.27l3.9-2.14c1.15.32 2.38.49 3.82.49 6.63 0 12-4.98 12-11.11S18.63 0 12 0zm1.19 14.94l-3.2-3.43-6.22 3.43 6.66-7.08 3.25 3.43 6.18-3.43-6.67 7.08z"/></svg></a>
+      </p>
 
-        <h2>💡 Prisberegning</h2>
-        <p id="navnDisplay"></p>
-        <p>Indtast dit filamentforbrug og printtid for at se din pris.</p>
-        
-        <label>Filamentforbrug (g):</label>
-        <input type="number" id="filament" placeholder="Indtast antal gram">
-        
-        <label>Printtid (timer):</label>
-        <input type="number" id="printtid" placeholder="Indtast printtid i timer">
-        
-        <button onclick="beregnPris()">Beregn Pris</button>
-        
-        <div class="result" id="result"></div>
-        
-        <div class="info-box">
-            <h2>💰 Prisberegner for 3D print</h2>
-            <p>Hos Yding 3D Print beregnes prisen for dine 3D print baseret på materialeforbrug og printtid. Yding 3D Print ønsker at være 100% gennemsigtig om prissætningen, så her kan du se præcis, hvordan prisen beregnes.</p>
-            <ul>
-                <li>🧵 <strong>Filament:</strong> Yding 3D Print bruger som standard PLA, PLA Matte og PETG-HF.</li>
-                <li>💰 <strong>Filamentpris:</strong> 180,25 DKK/kg (0,18025 DKK/g)</li>
-                <li>⚡ <strong>Strømpris:</strong> 3,00 DKK/kWh</li>
-                <li>🔌 <strong>Printerforbrug:</strong> 100W (0,1 kW) under print</li>
-                <li>📈 <strong>Markup:</strong> 300% (salgpris = cost × 3)</li>
-                <li>⏳ <strong>Minimumspris:</strong> 30,00 DKK</li>
-            </ul>
-            <h3>Sådan beregnes prisen</h3>
-            <ol>
-                <li>Filamentomkostning: Filamentforbrug (g) × 0,18025 DKK/g</li>
-                <li>Strømomkostning: Printtid (timer) × 0,1 kW × 3,00 DKK/kWh</li>
-                <li>Total omkostning = Filament + Strøm</li>
-                <li>Salgspris = Total omkostning × 3 (markup)</li>
-                <li>Endelig pris: Hvis salgsprisen er under 30 DKK, justeres den op til minimumsprisen.</li>
-            </ol>
-            <h3>💡 Eksempel</h3>
-            <ul>
-                <li><strong>Filamentforbrug:</strong> 50 g</li>
-                <li><strong>Printtid:</strong> 2 timer</li>
-                <li><strong>Filamentomkostning:</strong> 50 × 0,18025 = 9,01 DKK</li>
-                <li><strong>Strømomkostning:</strong> 2 × 0,1 × 3,00 = 0,60 DKK</li>
-                <li><strong>Total omkostning:</strong> 9,61 DKK</li>
-                <li><strong>Salgspris:</strong> 9,61 × 3 = 28,83 DKK (justeres til 30 DKK, da det er minimumsprisen).</li>
-            </ul>
-        </div>
+      <h2>💡 Prisberegning</h2>
+      <p id="navnDisplay"></p>
+      <p>Indtast dit filamentforbrug og printtid for at se din pris.</p>
 
-        <div class="info-box">
-            <h3>ℹ️ Disclaimer</h3>
-            <p>3D print er opbygget af mange lag, og der kan derfor forekomme små overfladefejl. Resultatet er næsten altid perfekt, men meget komplekse modeller kan ændre det endelige resultat. Hvis jeg, Yding 3D Print, vurderer at printet er i dårlig stand, bliver det naturligvis printet om uden beregning.</p>
-        </div>
+      <label>Filamentforbrug (g):</label>
+      <input type="number" id="filament" placeholder="Indtast antal gram" />
+
+      <label>Printtid (timer):</label>
+      <input
+        type="number"
+        id="printtid"
+        placeholder="Indtast printtid i timer"
+      />
+
+      <button onclick="beregnPris()">Beregn Pris</button>
+
+      <div class="result" id="result"></div>
+
+      <div class="info-box">
+        <h2>💰 Prisberegner for 3D print</h2>
+        <p>
+          Hos Yding 3D Print beregnes prisen for dine 3D print baseret på
+          materialeforbrug og printtid. Yding 3D Print ønsker at være 100%
+          gennemsigtig om prissætningen, så her kan du se præcis, hvordan prisen
+          beregnes.
+        </p>
+        <ul>
+          <li>
+            🧵 <strong>Filament:</strong> Yding 3D Print bruger som standard
+            PLA, PLA Matte og PETG-HF.
+          </li>
+          <li>
+            💰 <strong>Filamentpris:</strong> 180,25 DKK/kg (0,18025 DKK/g)
+          </li>
+          <li>⚡ <strong>Strømpris:</strong> 3,00 DKK/kWh</li>
+          <li>🔌 <strong>Printerforbrug:</strong> 100W (0,1 kW) under print</li>
+          <li>📈 <strong>Markup:</strong> 300% (salgpris = cost × 3)</li>
+          <li>⏳ <strong>Minimumspris:</strong> 30,00 DKK</li>
+        </ul>
+        <h3>Sådan beregnes prisen</h3>
+        <ol>
+          <li>Filamentomkostning: Filamentforbrug (g) × 0,18025 DKK/g</li>
+          <li>Strømomkostning: Printtid (timer) × 0,1 kW × 3,00 DKK/kWh</li>
+          <li>Total omkostning = Filament + Strøm</li>
+          <li>Salgspris = Total omkostning × 3 (markup)</li>
+          <li>
+            Endelig pris: Hvis salgsprisen er under 30 DKK, justeres den op til
+            minimumsprisen.
+          </li>
+        </ol>
+        <h3>💡 Eksempel</h3>
+        <ul>
+          <li><strong>Filamentforbrug:</strong> 50 g</li>
+          <li><strong>Printtid:</strong> 2 timer</li>
+          <li><strong>Filamentomkostning:</strong> 50 × 0,18025 = 9,01 DKK</li>
+          <li><strong>Strømomkostning:</strong> 2 × 0,1 × 3,00 = 0,60 DKK</li>
+          <li><strong>Total omkostning:</strong> 9,61 DKK</li>
+          <li>
+            <strong>Salgspris:</strong> 9,61 × 3 = 28,83 DKK (justeres til 30
+            DKK, da det er minimumsprisen).
+          </li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h3>ℹ️ Disclaimer</h3>
+        <p>
+          3D print er opbygget af mange lag, og der kan derfor forekomme små
+          overfladefejl. Resultatet er næsten altid perfekt, men meget komplekse
+          modeller kan ændre det endelige resultat. Hvis jeg, Yding 3D Print,
+          vurderer at printet er i dårlig stand, bliver det naturligvis printet
+          om uden beregning.
+        </p>
+      </div>
     </div>
-    
+
     <script>
-        let printNavn = '';
+      let printNavn = "";
 
-        const themeToggle = document.getElementById('themeToggle');
+      const themeToggle = document.getElementById("themeToggle");
 
-        function applyTheme(theme) {
-            document.body.classList.toggle('dark', theme === 'dark');
+      function applyTheme(theme) {
+        document.body.classList.toggle("dark", theme === "dark");
+      }
+
+      function updateToggleText() {
+        themeToggle.textContent = document.body.classList.contains("dark")
+          ? "☀️"
+          : "🌙";
+      }
+
+      function initTheme() {
+        const storedTheme = localStorage.getItem("theme");
+        if (storedTheme) {
+          applyTheme(storedTheme);
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          applyTheme("dark");
         }
+        updateToggleText();
+      }
 
-        function updateToggleText() {
-            themeToggle.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+      themeToggle.addEventListener("click", () => {
+        const newTheme = document.body.classList.contains("dark")
+          ? "light"
+          : "dark";
+        applyTheme(newTheme);
+        localStorage.setItem("theme", newTheme);
+        updateToggleText();
+      });
+
+      function beregnPris() {
+        let filament =
+          parseFloat(document.getElementById("filament").value) || 0;
+        let printtid =
+          parseFloat(document.getElementById("printtid").value) || 0;
+
+        let filamentPrisPrGram = 0.18025;
+        let stromPrisPrKWh = 3;
+        let printerForbrugKW = 0.1;
+        let markup = 3;
+        let minPris = 30;
+
+        let filamentOmkostning = filament * filamentPrisPrGram;
+        let stromOmkostning = printtid * printerForbrugKW * stromPrisPrKWh;
+        let totalOmkostning = filamentOmkostning + stromOmkostning;
+        let salgsPris = totalOmkostning * markup;
+        let endeligPris = Math.max(salgsPris, minPris);
+
+        const navnTekst = printNavn ? ` for <strong>${printNavn}</strong>` : "";
+        document.getElementById("result").innerHTML =
+          `🛒 Din pris${navnTekst}: <strong>${endeligPris.toFixed(2)} DKK</strong>`;
+      }
+
+      function prefillFraQuery() {
+        const params = new URLSearchParams(window.location.search);
+        const filamentParam = params.get("filament");
+        const timeParam = params.get("printtid") || params.get("timer");
+        const navnParam = params.get("navn") || params.get("name");
+
+        if (filamentParam !== null) {
+          document.getElementById("filament").value = filamentParam;
         }
-
-        function initTheme() {
-            const storedTheme = localStorage.getItem('theme');
-            if (storedTheme) {
-                applyTheme(storedTheme);
-            } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                applyTheme('dark');
-            }
-            updateToggleText();
+        if (timeParam !== null) {
+          document.getElementById("printtid").value = timeParam;
         }
-
-        themeToggle.addEventListener('click', () => {
-            const newTheme = document.body.classList.contains('dark') ? 'light' : 'dark';
-            applyTheme(newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateToggleText();
-        });
-
-        function beregnPris() {
-            let filament = parseFloat(document.getElementById('filament').value) || 0;
-            let printtid = parseFloat(document.getElementById('printtid').value) || 0;
-            
-            let filamentPrisPrGram = 0.18025;
-            let stromPrisPrKWh = 3;
-            let printerForbrugKW = 0.1;
-            let markup = 3;
-            let minPris = 30;
-            
-            let filamentOmkostning = filament * filamentPrisPrGram;
-            let stromOmkostning = printtid * printerForbrugKW * stromPrisPrKWh;
-            let totalOmkostning = filamentOmkostning + stromOmkostning;
-            let salgsPris = totalOmkostning * markup;
-            let endeligPris = Math.max(salgsPris, minPris);
-
-            const navnTekst = printNavn ? ` for <strong>${printNavn}</strong>` : '';
-            document.getElementById('result').innerHTML = `🛒 Din pris${navnTekst}: <strong>${endeligPris.toFixed(2)} DKK</strong>`;
+        if (navnParam !== null) {
+          printNavn = navnParam;
+          document.getElementById("navnDisplay").innerHTML =
+            `Prisestimat for: <strong>${printNavn}</strong>`;
         }
-
-        function prefillFraQuery() {
-            const params = new URLSearchParams(window.location.search);
-            const filamentParam = params.get('filament');
-            const timeParam = params.get('printtid') || params.get('timer');
-            const navnParam = params.get('navn') || params.get('name');
-
-            if (filamentParam !== null) {
-                document.getElementById('filament').value = filamentParam;
-            }
-            if (timeParam !== null) {
-                document.getElementById('printtid').value = timeParam;
-            }
-            if (navnParam !== null) {
-                printNavn = navnParam;
-                document.getElementById('navnDisplay').innerHTML = `Prisestimat for: <strong>${printNavn}</strong>`;
-            }
-            if (filamentParam !== null || timeParam !== null) {
-                beregnPris();
-            }
+        if (filamentParam !== null || timeParam !== null) {
+          beregnPris();
         }
+      }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            initTheme();
-            prefillFraQuery();
-        });
+      document.addEventListener("DOMContentLoaded", () => {
+        initTheme();
+        prefillFraQuery();
+      });
     </script>
-</body>
+  </body>
 </html>
