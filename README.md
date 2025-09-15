@@ -19,3 +19,9 @@ npx --yes htmlhint index.html
 
 Ændringer til filerne bør committes via git.
 
+## Disclaimer
+3D print er opbygget af mange lag, og der kan derfor forekomme små overfladefejl. Resultatet er næsten altid perfekt, men meget komplekse modeller kan ændre det endelige resultat. Hvis Yding 3D Print vurderer, at printet er i dårlig stand, laves der naturligvis et nyt uden beregning.
+
+## Links
+- [Instagram](https://www.instagram.com/yding3dprint/)
+
