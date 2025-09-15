@@ -68,6 +68,7 @@
         <p>💬 <strong>Jeg foretrækker, at du skriver til mig på Facebook Messenger:</strong> <a href="https://www.facebook.com/messages/t/580122692" target="_blank">Send en besked her</a></p>
         
         <h2>💡 Prisberegning</h2>
+        <p id="navnDisplay"></p>
         <p>Indtast dit filamentforbrug og printtid for at se din pris.</p>
         
         <label>Filamentforbrug (g):</label>
@@ -112,6 +113,8 @@
     </div>
     
     <script>
+        let printNavn = '';
+
         function beregnPris() {
             let filament = parseFloat(document.getElementById('filament').value) || 0;
             let printtid = parseFloat(document.getElementById('printtid').value) || 0;
@@ -127,20 +130,26 @@
             let totalOmkostning = filamentOmkostning + stromOmkostning;
             let salgsPris = totalOmkostning * markup;
             let endeligPris = Math.max(salgsPris, minPris);
-            
-            document.getElementById('result').innerHTML = `🛒 Din pris: <strong>${endeligPris.toFixed(2)} DKK</strong>`;
+
+            const navnTekst = printNavn ? ` for <strong>${printNavn}</strong>` : '';
+            document.getElementById('result').innerHTML = `🛒 Din pris${navnTekst}: <strong>${endeligPris.toFixed(2)} DKK</strong>`;
         }
 
         function prefillFraQuery() {
             const params = new URLSearchParams(window.location.search);
             const filamentParam = params.get('filament');
             const timeParam = params.get('printtid') || params.get('timer');
+            const navnParam = params.get('navn') || params.get('name');
 
             if (filamentParam !== null) {
                 document.getElementById('filament').value = filamentParam;
             }
             if (timeParam !== null) {
                 document.getElementById('printtid').value = timeParam;
+            }
+            if (navnParam !== null) {
+                printNavn = navnParam;
+                document.getElementById('navnDisplay').innerHTML = `Prisestimat for: <strong>${printNavn}</strong>`;
             }
             if (filamentParam !== null || timeParam !== null) {
                 beregnPris();
