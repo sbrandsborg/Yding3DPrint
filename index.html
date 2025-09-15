@@ -16,6 +16,8 @@
             --button-hover-bg: #218838;
             --info-bg: #fff3cd;
             --info-border: #ffa000;
+            --link-color: #1a0dab;
+            --link-hover-color: #0a58ca;
         }
 
         body {
@@ -85,6 +87,22 @@
             text-align: left;
         }
 
+        a {
+            color: var(--link-color);
+            text-decoration: underline;
+        }
+
+        a:hover {
+            color: var(--link-hover-color);
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+
         body.dark {
             --bg-color: #121212;
             --text-color: #eeeeee;
@@ -96,6 +114,8 @@
             --button-hover-bg: #2d7d51;
             --info-bg: #333333;
             --info-border: #ffa000;
+            --link-color: #82cfff;
+            --link-hover-color: #58a6ff;
         }
     </style>
 </head>
@@ -108,8 +128,16 @@
         <p>📞 Kontakt: steffen@sbrandsborg.dk</p>
         <p>🔢 CVR: 42002984</p>
         <p>💰 MobilePay Box: <strong>8125HG</strong></p>
-        <p>💬 <strong>Jeg foretrækker, at du skriver til mig på Facebook Messenger:</strong> <a href="https://www.facebook.com/messages/t/580122692" target="_blank">Send en besked her</a></p>
-        <p>🔗 Links: <a href="https://www.instagram.com/yding3dprint/" target="_blank">Instagram</a></p>
+        <p>💬 <strong>Jeg foretrækker, at du skriver til mig på Facebook Messenger:</strong>
+            <a href="https://www.facebook.com/messages/t/580122692" target="_blank">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/Facebook_Messenger_logo_2020.svg" alt="Messenger" class="icon">Send en besked her
+            </a>
+        </p>
+        <p>🔗 Links:
+            <a href="https://www.instagram.com/yding3dprint/" target="_blank">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" class="icon">Instagram
+            </a>
+        </p>
 
         <h2>💡 Prisberegning</h2>
         <p id="navnDisplay"></p>
