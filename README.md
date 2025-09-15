@@ -2,7 +2,7 @@
 
 Dette repository indeholder koden til [yding3dprint.dk](https://yding3dprint.dk). Koden er gjort offentligt for at sikre fuld transparens omkring priser og beregninger.
 
-Et simpelt statisk website med en prisberegner til 3D‑print. Siden giver information om Yding 3D Print og beregner en estimeret pris baseret på materialeforbrug og printtid.
+Et simpelt statisk website med en prisberegner til 3D print. Siden giver information om Yding 3D Print og beregner en estimeret pris baseret på materialeforbrug og printtid.
 
 ## Sådan bruges siden
 1. Åbn `index.html` i en moderne webbrowser.
