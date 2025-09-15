@@ -254,6 +254,13 @@
         updateToggleText();
       });
 
+      function formatDKK(amount) {
+        return amount.toLocaleString("da-DK", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+      }
+
       function beregnPris() {
         let filament =
           parseFloat(document.getElementById("filament").value) || 0;
@@ -273,8 +280,14 @@
         let endeligPris = Math.max(salgsPris, minPris);
 
         const navnTekst = printNavn ? ` for <strong>${printNavn}</strong>` : "";
+        const oprindeligPrisTekst =
+          salgsPris < minPris
+            ? ` (oprindelig pris: ${formatDKK(salgsPris)} DKK)`
+            : "";
         document.getElementById("result").innerHTML =
-          `🛒 Din pris${navnTekst}: <strong>${endeligPris.toFixed(2)} DKK</strong>`;
+          `🛒 Din pris${navnTekst}: <strong>${formatDKK(
+            endeligPris
+          )} DKK</strong>${oprindeligPrisTekst}`;
       }
 
       function prefillFraQuery() {
