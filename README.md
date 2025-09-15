@@ -7,6 +7,7 @@ Et simpelt statisk website med en prisberegner til 3D‑print. Siden giver infor
 ## Sådan bruges siden
 1. Åbn `yding3dprint.htm` i en moderne webbrowser.
 2. Indtast dit forventede filamentforbrug og printtid.
+   - Alternativt kan felterne forudfyldes via URL'en, f.eks. `yding3dprint.htm?filament=50&printtid=2`.
 3. Klik på **Beregn Pris** for at se den beregnede pris.
 
 ## Udvikling
