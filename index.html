@@ -159,8 +159,12 @@
       />
 
       <button onclick="beregnPris()">Beregn Pris</button>
+      <button type="button" id="specToggle" onclick="toggleSpecifikation()">
+        Vis pris-specifikation
+      </button>
 
       <div class="result" id="result"></div>
+      <div class="info-box" id="prisSpecifikation" hidden></div>
 
       <div class="info-box">
         <h2>💰 Prisberegner for 3D print</h2>
@@ -267,12 +271,13 @@
         let printtid =
           parseFloat(document.getElementById("printtid").value) || 0;
 
-        let filamentPrisPrGram = 0.18025;
+        let filamentPrisKg = 180.25;
         let stromPrisPrKWh = 3;
         let printerForbrugKW = 0.1;
         let markup = 3;
         let minPris = 30;
 
+        let filamentPrisPrGram = filamentPrisKg / 1000;
         let filamentOmkostning = filament * filamentPrisPrGram;
         let stromOmkostning = printtid * printerForbrugKW * stromPrisPrKWh;
         let totalOmkostning = filamentOmkostning + stromOmkostning;
@@ -287,7 +292,71 @@
         document.getElementById("result").innerHTML =
           `🛒 Din pris${navnTekst}: <strong>${formatDKK(
             endeligPris
-          )} DKK</strong>${oprindeligPrisTekst}`;
+          )} DKK</strong>${oprindeligPrisTekst}</div>`;
+
+        opdaterSpecifikation({
+          filamentOmkostning,
+          stromOmkostning,
+          totalOmkostning,
+          salgsPris,
+          endeligPris,
+          navnTekst,
+          filamentPrisPrGram,
+          stromPrisPrKWh,
+          printerForbrugKW,
+          markup,
+          minPris,
+        });
+      }
+
+      function opdaterSpecifikation({
+        filamentOmkostning,
+        stromOmkostning,
+        totalOmkostning,
+        salgsPris,
+        endeligPris,
+        navnTekst,
+        filamentPrisPrGram,
+        stromPrisPrKWh,
+        printerForbrugKW,
+        markup,
+        minPris,
+      }) {
+        document.getElementById("prisSpecifikation").innerHTML = `
+          <h3>🧾 Pris-specifikation${navnTekst}</h3>
+          <ul>
+            <li>🧵 Filament: ${formatDKK(filamentOmkostning)} DKK</li>
+            <li>⚡ Strøm: ${formatDKK(stromOmkostning)} DKK</li>
+            <li>📦 Kostpris i alt: ${formatDKK(totalOmkostning)} DKK</li>
+            <li>📈 Markup: ${markup}× (salgspris: ${formatDKK(
+          salgsPris
+        )} DKK)</li>
+            <li>⏳ Minimumspris: ${formatDKK(minPris)} DKK</li>
+            <li>🛒 Endelig pris: ${formatDKK(endeligPris)} DKK</li>
+          </ul>
+          <p>
+            Beregning: filament (g) × ${formatDKK(
+              filamentPrisPrGram
+            )} DKK/g
+            + printtid (timer) × ${printerForbrugKW} kW × ${formatDKK(
+          stromPrisPrKWh
+        )} DKK/kWh
+          </p>
+        `;
+      }
+
+      function toggleSpecifikation() {
+        const box = document.getElementById("prisSpecifikation");
+        const toggleButton = document.getElementById("specToggle");
+        const isHidden = box.hasAttribute("hidden");
+        if (isHidden) {
+          box.removeAttribute("hidden");
+          toggleButton.textContent = "Skjul pris-specifikation";
+          beregnPris();
+        } else {
+          box.setAttribute("hidden", "");
+          toggleButton.textContent = "Vis pris-specifikation";
+        }
       }
 
       function prefillFraQuery() {
