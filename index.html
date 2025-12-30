@@ -158,28 +158,37 @@
         placeholder="Indtast printtid i timer"
       />
 
-      <h3>Valgfri pris-overstyring</h3>
-      <p>
-        Indtast kun disse felter, hvis du vil overstyre standardpriserne for
-        filament eller strøm.
-      </p>
-      <label>Filamentpris (DKK/kg):</label>
-      <input
-        type="number"
-        id="filamentPris"
-        placeholder="Standard: 180,25 DKK/kg"
-        step="0.01"
-        min="0"
-      />
+      <button
+        type="button"
+        id="overrideToggle"
+        onclick="togglePrisOverstyring()"
+      >
+        Vis valgfri pris-overstyring
+      </button>
+      <div id="prisOverstyring" hidden>
+        <h3>Valgfri pris-overstyring</h3>
+        <p>
+          Indtast kun disse felter, hvis du vil overstyre standardpriserne for
+          filament eller strøm.
+        </p>
+        <label>Filamentpris (DKK/kg):</label>
+        <input
+          type="number"
+          id="filamentPris"
+          placeholder="Standard: 180,25 DKK/kg"
+          step="0.01"
+          min="0"
+        />
 
-      <label>Strømpris (DKK/kWh):</label>
-      <input
-        type="number"
-        id="stromPris"
-        placeholder="Standard: 3,00 DKK/kWh"
-        step="0.01"
-        min="0"
-      />
+        <label>Strømpris (DKK/kWh):</label>
+        <input
+          type="number"
+          id="stromPris"
+          placeholder="Standard: 3,00 DKK/kWh"
+          step="0.01"
+          min="0"
+        />
+      </div>
 
       <button onclick="beregnPris()">Beregn Pris</button>
       <button type="button" id="specToggle" onclick="toggleSpecifikation()">
@@ -381,6 +390,19 @@
         } else {
           box.setAttribute("hidden", "");
           toggleButton.textContent = "Vis pris-specifikation";
+        }
+      }
+
+      function togglePrisOverstyring() {
+        const box = document.getElementById("prisOverstyring");
+        const toggleButton = document.getElementById("overrideToggle");
+        const isHidden = box.hasAttribute("hidden");
+        if (isHidden) {
+          box.removeAttribute("hidden");
+          toggleButton.textContent = "Skjul valgfri pris-overstyring";
+        } else {
+          box.setAttribute("hidden", "");
+          toggleButton.textContent = "Vis valgfri pris-overstyring";
         }
       }
 
