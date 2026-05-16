@@ -1,437 +1,590 @@
 <!doctype html>
-<html lang="da">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Yding 3D Print - Priser & Beregner</title>
-    <style>
-      :root {
-        --bg-color: #f4f4f4;
-        --text-color: #333;
-        --container-bg: #ffffff;
-        --input-bg: #ffffff;
-        --input-color: #000000;
-        --input-border: #cccccc;
-        --button-bg: #28a745;
-        --button-hover-bg: #218838;
-        --info-bg: #fff3cd;
-        --info-border: #ffa000;
-        --link-color: #1a0dab;
-        --link-hover-color: #0a58ca;
-      }
+<html lang="da" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yding 3D Print — Prisberegner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --accent:      #ff6b35;
+      --accent-dim:  #cc4f1f;
+      --bg:          #0d0d0d;
+      --bg-card:     #161616;
+      --bg-input:    #1e1e1e;
+      --brd:         #2a2a2a;
+      --fg:          #f0f0f0;
+      --fg-sec:      #aaaaaa;
+      --fg-muted:    #666666;
+      --green:       #22c55e;
+      --radius:      12px;
+      --radius-sm:   8px;
+    }
 
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: var(--bg-color);
-        color: var(--text-color);
-        text-align: center;
-      }
+    [data-theme="light"] {
+      --bg:       #f5f5f5;
+      --bg-card:  #ffffff;
+      --bg-input: #f0f0f0;
+      --brd:      #e0e0e0;
+      --fg:       #111111;
+      --fg-sec:   #555555;
+      --fg-muted: #999999;
+    }
 
-      .container {
-        max-width: 800px;
-        margin: 40px auto;
-        padding: 20px;
-        background: var(--container-bg);
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-      h1,
-      h2,
-      h3 {
-        color: var(--text-color);
-      }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      transition: background 0.2s, color 0.2s;
+    }
 
-      input {
-        width: 100%;
-        padding: 10px;
-        margin: 10px 0;
-        border: 1px solid var(--input-border);
-        border-radius: 5px;
-        font-size: 16px;
-        background-color: var(--input-bg);
-        color: var(--input-color);
-      }
+    /* ── Top bar ── */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--brd);
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 10;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 17px;
+      letter-spacing: -0.3px;
+    }
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .theme-btn {
+      background: var(--bg-input);
+      border: 1px solid var(--brd);
+      color: var(--fg-sec);
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .theme-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-      button {
-        background: var(--button-bg);
-        color: white;
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
-        font-size: 18px;
-        cursor: pointer;
-      }
+    /* ── Layout ── */
+    .page { max-width: 680px; margin: 0 auto; padding: 32px 24px 80px; }
 
-      button:hover {
-        background: var(--button-hover-bg);
-      }
+    /* ── Hero ── */
+    .hero { margin-bottom: 40px; }
+    .hero h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero p { color: var(--fg-sec); font-size: 15px; line-height: 1.6; }
 
-      .theme-toggle {
-        float: right;
-      }
+    /* ── Contact chips ── */
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--brd);
+      border-radius: 100px;
+      font-size: 13px;
+      color: var(--fg-sec);
+      text-decoration: none;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .chip:hover { border-color: var(--accent); color: var(--accent); }
+    .chip svg { width: 14px; height: 14px; flex-shrink: 0; }
 
-      .result {
-        margin-top: 20px;
-        font-size: 18px;
-        font-weight: bold;
-      }
+    /* ── Section title ── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: var(--fg-muted);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      margin-top: 36px;
+    }
 
-      .info-box {
-        margin-top: 20px;
-        padding: 20px;
-        background: var(--info-bg);
-        border-left: 5px solid var(--info-border);
-        text-align: left;
-      }
+    /* ── Card ── */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--brd);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    .card + .card { margin-top: 12px; }
 
-      a {
-        color: var(--link-color);
-        text-decoration: underline;
-      }
+    /* ── Calculator ── */
+    .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 480px) { .calc-grid { grid-template-columns: 1fr; } }
 
-      a:hover {
-        color: var(--link-hover-color);
-      }
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: var(--fg-sec);
+      margin-bottom: 8px;
+    }
+    .input-wrap { position: relative; }
+    .input-wrap input {
+      width: 100%;
+      padding: 11px 44px 11px 14px;
+      background: var(--bg-input);
+      border: 1px solid var(--brd);
+      border-radius: var(--radius-sm);
+      color: var(--fg);
+      font-family: inherit;
+      font-size: 15px;
+      transition: border-color 0.15s;
+      -moz-appearance: textfield;
+    }
+    .input-wrap input::-webkit-outer-spin-button,
+    .input-wrap input::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .input-wrap input:focus { outline: none; border-color: var(--accent); }
+    .input-wrap .unit {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      color: var(--fg-muted);
+      pointer-events: none;
+    }
 
-      .icon {
-        width: 20px;
-        height: 20px;
-        vertical-align: middle;
-        margin-right: 5px;
-      }
+    /* ── Result ── */
+    .result-box {
+      margin-top: 20px;
+      padding: 20px;
+      background: var(--bg-input);
+      border: 1px solid var(--brd);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .result-label { font-size: 13px; color: var(--fg-sec); }
+    .result-price {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -1px;
+      white-space: nowrap;
+    }
+    .result-price .currency { font-size: 16px; font-weight: 500; margin-left: 4px; }
+    .result-min-note { font-size: 11px; color: var(--fg-muted); margin-top: 2px; }
 
-      body.dark {
-        --bg-color: #121212;
-        --text-color: #eeeeee;
-        --container-bg: #1e1e1e;
-        --input-bg: #333333;
-        --input-color: #eeeeee;
-        --input-border: #555555;
-        --button-bg: #3a9d64;
-        --button-hover-bg: #2d7d51;
-        --info-bg: #333333;
-        --info-border: #ffa000;
-        --link-color: #82cfff;
-        --link-hover-color: #58a6ff;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <button id="themeToggle" class="theme-toggle"></button>
-      <h1>🖨️ Yding 3D Print</h1>
-      <h3>
-        💡 Jeg købte en 3D printer og har printet i mange timer – nu har jeg
-        ledig kapacitet til at tage ordrer for det lokale community. Hvis du
-        ikke har knowhow, økonomi eller mulighed for at printe selv, så hjælper
-        jeg gerne! 🎉
-      </h3>
-      <p>📍 Yding Toft 8B, 8752 Østbirk</p>
-      <p>📞 Kontakt: steffen@sbrandsborg.dk</p>
-      <p>🔢 CVR: 42002984</p>
-      <p>💰 MobilePay Box: <strong>8125HG</strong></p>
-      <p>
-        💬
-        <strong
-          >Jeg foretrækker, at du skriver til mig på Facebook Messenger:</strong
-        ><!-- prettier-ignore --><a href="https://www.facebook.com/messages/t/580122692" target="_blank"><svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><title>Messenger</title><path fill="#00B2FF" d="M12 0C5.37 0 0 4.98 0 11.11c0 3.5 1.67 6.6 4.28 8.62v4.27l3.9-2.14c1.15.32 2.38.49 3.82.49 6.63 0 12-4.98 12-11.11S18.63 0 12 0zm1.19 14.94l-3.2-3.43-6.22 3.43 6.66-7.08 3.25 3.43 6.18-3.43-6.67 7.08z"/></svg>Send en besked her</a>
-      </p>
-      <p>
-        🔗 Links:<!-- prettier-ignore --><a href="https://www.instagram.com/yding3dprint/" target="_blank" aria-label="Instagram"><svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><title>Instagram</title><path fill="#E4405F" d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm10 2c1.7 0 3 1.3 3 3v10c0 1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3V7c0-1.7 1.3-3 3-3h10zm-5 3.5A4.5 4.5 0 1 0 16.5 12 4.5 4.5 0 0 0 12 7.5zm0 7A2.5 2.5 0 1 1 14.5 12 2.5 2.5 0 0 1 12 14.5zm4.8-7.7a1 1 0 1 1-1-1 1 1 0 0 1 1 1z"/></svg></a
-        ><!-- prettier-ignore --><a href="https://www.facebook.com/messages/t/580122692" target="_blank" aria-label="Messenger"><svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><title>Messenger</title><path fill="#00B2FF" d="M12 0C5.37 0 0 4.98 0 11.11c0 3.5 1.67 6.6 4.28 8.62v4.27l3.9-2.14c1.15.32 2.38.49 3.82.49 6.63 0 12-4.98 12-11.11S18.63 0 12 0zm1.19 14.94l-3.2-3.43-6.22 3.43 6.66-7.08 3.25 3.43 6.18-3.43-6.67 7.08z"/></svg></a>
-      </p>
+    /* ── Spec table ── */
+    .spec-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    .spec-table tr { border-bottom: 1px solid var(--brd); }
+    .spec-table tr:last-child { border-bottom: none; }
+    .spec-table td { padding: 10px 0; font-size: 13px; }
+    .spec-table td:last-child { text-align: right; color: var(--fg-sec); }
+    .spec-table .total td { font-weight: 600; color: var(--fg); }
+    .spec-table .final td { font-weight: 700; color: var(--accent); font-size: 14px; }
 
-      <h2>💡 Prisberegning</h2>
-      <p id="navnDisplay"></p>
-      <p>Indtast dit filamentforbrug og printtid for at se din pris.</p>
+    /* ── Accordion ── */
+    .accordion-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      background: none;
+      border: none;
+      color: var(--fg-sec);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 14px 0 0;
+      gap: 8px;
+      transition: color 0.15s;
+    }
+    .accordion-trigger:hover { color: var(--fg); }
+    .accordion-trigger .chevron {
+      font-size: 10px;
+      transition: transform 0.2s;
+    }
+    .accordion-trigger[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+    .accordion-body { overflow: hidden; max-height: 0; transition: max-height 0.25s ease; }
+    .accordion-body.open { max-height: 600px; }
+    .accordion-inner { padding-top: 16px; }
 
-      <label>Filamentforbrug (g):</label>
-      <input type="number" id="filament" placeholder="Indtast antal gram" />
+    /* ── Override inputs ── */
+    .override-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 480px) { .override-grid { grid-template-columns: 1fr; } }
 
-      <label>Printtid (timer):</label>
-      <input
-        type="number"
-        id="printtid"
-        placeholder="Indtast printtid i timer"
-      />
+    /* ── Info card ── */
+    .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--brd); font-size: 13px; }
+    .info-row:last-child { border-bottom: none; }
+    .info-row span:last-child { color: var(--fg-sec); text-align: right; }
 
-      <button
-        type="button"
-        id="overrideToggle"
-        onclick="togglePrisOverstyring()"
-      >
-        Vis valgfri pris-overstyring
-      </button>
-      <div id="prisOverstyring" hidden>
-        <h3>Valgfri pris-overstyring</h3>
-        <p>
-          Indtast kun disse felter, hvis du vil overstyre standardpriserne for
-          filament eller strøm.
-        </p>
-        <label>Filamentpris (DKK/kg):</label>
-        <input
-          type="number"
-          id="filamentPris"
-          placeholder="Standard: 180,25 DKK/kg"
-          step="0.01"
-          min="0"
-        />
+    /* ── Formula ── */
+    .formula {
+      background: var(--bg-input);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      font-size: 13px;
+      color: var(--fg-sec);
+      line-height: 1.8;
+      margin-top: 12px;
+    }
+    .formula code { color: var(--accent); font-family: monospace; }
 
-        <label>Strømpris (DKK/kWh):</label>
-        <input
-          type="number"
-          id="stromPris"
-          placeholder="Standard: 3,00 DKK/kWh"
-          step="0.01"
-          min="0"
-        />
+    /* ── Disclaimer ── */
+    .disclaimer {
+      margin-top: 12px;
+      padding: 14px 16px;
+      background: var(--bg-input);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-size: 13px;
+      color: var(--fg-sec);
+      line-height: 1.6;
+    }
+
+    /* ── Share button ── */
+    .share-row { display: flex; gap: 10px; margin-top: 12px; }
+    .share-btn {
+      flex: 1;
+      padding: 10px 16px;
+      background: none;
+      border: 1px solid var(--brd);
+      border-radius: var(--radius-sm);
+      color: var(--fg-sec);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .share-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .share-btn.copied { border-color: var(--green); color: var(--green); }
+
+    /* ── Pre-fill notice ── */
+    .prefill-notice {
+      padding: 10px 14px;
+      background: var(--bg-input);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="logo">
+    <div class="logo-icon">Y</div>
+    Yding 3D Print
+  </div>
+  <button class="theme-btn" id="themeToggle" title="Skift tema">🌙</button>
+</header>
+
+<main class="page">
+
+  <!-- Hero -->
+  <div class="hero">
+    <h1>3D print til dit projekt</h1>
+    <p>Prisberegner nedenfor er 100% gennemsigtig.</p>
+    <div class="chips">
+      <span class="chip">📍 Yding Toft 8B, 8752 Østbirk</span>
+      <a class="chip" href="mailto:steffen@sbrandsborg.dk">✉️ steffen@sbrandsborg.dk</a>
+      <a class="chip" href="sms:30202380">💬 SMS: 30 20 23 80</a>
+      <span class="chip">💳 MobilePay 8125HG</span>
+      <a class="chip" href="https://www.facebook.com/messages/t/580122692" target="_blank">
+        <svg viewBox="0 0 24 24" fill="#00B2FF"><path d="M12 0C5.37 0 0 4.98 0 11.11c0 3.5 1.67 6.6 4.28 8.62v4.27l3.9-2.14c1.15.32 2.38.49 3.82.49 6.63 0 12-4.98 12-11.11S18.63 0 12 0zm1.19 14.94l-3.2-3.43-6.22 3.43 6.66-7.08 3.25 3.43 6.18-3.43-6.67 7.08z"/></svg>
+        Messenger
+      </a>
+      <a class="chip" href="https://www.instagram.com/yding3dprint/" target="_blank">
+        <svg viewBox="0 0 24 24" fill="#E4405F"><path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm10 2c1.7 0 3 1.3 3 3v10c0 1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3V7c0-1.7 1.3-3 3-3h10zm-5 3.5A4.5 4.5 0 1 0 16.5 12 4.5 4.5 0 0 0 12 7.5zm0 7A2.5 2.5 0 1 1 14.5 12 2.5 2.5 0 0 1 12 14.5zm4.8-7.7a1 1 0 1 1-1-1 1 1 0 0 1 1 1z"/></svg>
+        Instagram
+      </a>
+    </div>
+  </div>
+
+  <!-- Calculator -->
+  <p class="section-label">Prisberegner</p>
+  <div class="card">
+
+    <div id="prefillNotice" class="prefill-notice" hidden></div>
+
+    <div class="calc-grid">
+      <div class="field">
+        <label>Filamentforbrug</label>
+        <div class="input-wrap">
+          <input type="number" id="filament" placeholder="0" min="0" step="0.1" oninput="beregnPris()" />
+          <span class="unit">g</span>
+        </div>
       </div>
-
-      <button onclick="beregnPris()">Beregn Pris</button>
-      <button type="button" id="specToggle" onclick="toggleSpecifikation()">
-        Vis pris-specifikation
-      </button>
-
-      <div class="result" id="result"></div>
-      <div class="info-box" id="prisSpecifikation" hidden></div>
-
-      <div class="info-box">
-        <h2>💰 Prisberegner for 3D print</h2>
-        <p>
-          Hos Yding 3D Print beregnes prisen for dine 3D print baseret på
-          materialeforbrug og printtid. Yding 3D Print ønsker at være 100%
-          gennemsigtig om prissætningen, så her kan du se præcis, hvordan prisen
-          beregnes.
-        </p>
-        <ul>
-          <li>
-            🧵 <strong>Filament:</strong> Yding 3D Print bruger som standard
-            PLA, PLA Matte og PETG-HF.
-          </li>
-          <li>
-            💰 <strong>Filamentpris:</strong> 180,25 DKK/kg (0,18025 DKK/g)
-          </li>
-          <li>⚡ <strong>Strømpris:</strong> 3,00 DKK/kWh</li>
-          <li>🔌 <strong>Printerforbrug:</strong> 100W (0,1 kW) under print</li>
-          <li>📈 <strong>Markup:</strong> 300% (salgpris = cost × 3)</li>
-          <li>⏳ <strong>Minimumspris:</strong> 30,00 DKK</li>
-        </ul>
-        <h3>Sådan beregnes prisen</h3>
-        <ol>
-          <li>Filamentomkostning: Filamentforbrug (g) × 0,18025 DKK/g</li>
-          <li>Strømomkostning: Printtid (timer) × 0,1 kW × 3,00 DKK/kWh</li>
-          <li>Total omkostning = Filament + Strøm</li>
-          <li>Salgspris = Total omkostning × 3 (markup)</li>
-          <li>
-            Endelig pris: Hvis salgsprisen er under 30 DKK, justeres den op til
-            minimumsprisen.
-          </li>
-        </ol>
-        <h3>💡 Eksempel</h3>
-        <ul>
-          <li><strong>Filamentforbrug:</strong> 50 g</li>
-          <li><strong>Printtid:</strong> 2 timer</li>
-          <li><strong>Filamentomkostning:</strong> 50 × 0,18025 = 9,01 DKK</li>
-          <li><strong>Strømomkostning:</strong> 2 × 0,1 × 3,00 = 0,60 DKK</li>
-          <li><strong>Total omkostning:</strong> 9,61 DKK</li>
-          <li>
-            <strong>Salgspris:</strong> 9,61 × 3 = 28,83 DKK (justeres til 30
-            DKK, da det er minimumsprisen).
-          </li>
-        </ul>
-      </div>
-
-      <div class="info-box">
-        <h3>ℹ️ Disclaimer</h3>
-        <p>
-          3D print er opbygget af mange lag, og der kan derfor forekomme små
-          overfladefejl. Resultatet er næsten altid perfekt, men meget komplekse
-          modeller kan ændre det endelige resultat. Hvis jeg, Yding 3D Print,
-          vurderer at printet er i dårlig stand, bliver det naturligvis printet
-          om uden beregning.
-        </p>
+      <div class="field">
+        <label>Printtid</label>
+        <div class="input-wrap">
+          <input type="number" id="printtid" placeholder="0" min="0" step="0.1" oninput="beregnPris()" />
+          <span class="unit">timer</span>
+        </div>
       </div>
     </div>
 
-    <script>
-      let printNavn = "";
+    <div class="result-box" id="resultBox">
+      <div>
+        <div class="result-label" id="resultLabel">Indtast værdier ovenfor</div>
+        <div class="result-min-note" id="resultMinNote"></div>
+      </div>
+      <div class="result-price" id="resultPrice">— <span class="currency">DKK</span></div>
+    </div>
 
-      const themeToggle = document.getElementById("themeToggle");
+    <!-- Share -->
+    <div class="share-row">
+      <button class="share-btn" id="shareBtn" onclick="delEstimat()">
+        <span id="shareBtnIcon">🔗</span>
+        <span id="shareBtnText">Kopiér estimat-link</span>
+      </button>
+    </div>
 
-      function applyTheme(theme) {
-        document.body.classList.toggle("dark", theme === "dark");
-      }
+    <!-- Spec accordion -->
+    <button class="accordion-trigger" id="specToggle" aria-expanded="false" onclick="toggleAccordion('spec')">
+      <span>Vis prisspecifikation</span>
+      <span class="chevron">▼</span>
+    </button>
+    <div class="accordion-body" id="specBody">
+      <div class="accordion-inner">
+        <table class="spec-table" id="specTable">
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
 
-      function updateToggleText() {
-        themeToggle.textContent = document.body.classList.contains("dark")
-          ? "☀️"
-          : "🌙";
-      }
+    <!-- Override accordion -->
+    <button class="accordion-trigger" id="overrideToggle" aria-expanded="false" onclick="toggleAccordion('override')">
+      <span>Tilpas filament- og strømpris</span>
+      <span class="chevron">▼</span>
+    </button>
+    <div class="accordion-body" id="overrideBody">
+      <div class="accordion-inner">
+        <div class="override-grid">
+          <div class="field">
+            <label>Filamentpris</label>
+            <div class="input-wrap">
+              <input type="number" id="filamentPris" placeholder="180.25" min="0" step="0.01" oninput="beregnPris()" />
+              <span class="unit">DKK/kg</span>
+            </div>
+          </div>
+          <div class="field">
+            <label>Strømpris</label>
+            <div class="input-wrap">
+              <input type="number" id="stromPris" placeholder="3.00" min="0" step="0.01" oninput="beregnPris()" />
+              <span class="unit">DKK/kWh</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-      function initTheme() {
-        const storedTheme = localStorage.getItem("theme");
-        if (storedTheme) {
-          applyTheme(storedTheme);
-        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-          applyTheme("dark");
-        }
-        updateToggleText();
-      }
+  </div>
 
-      themeToggle.addEventListener("click", () => {
-        const newTheme = document.body.classList.contains("dark")
-          ? "light"
-          : "dark";
-        applyTheme(newTheme);
-        localStorage.setItem("theme", newTheme);
-        updateToggleText();
-      });
+  <!-- Priser -->
+  <p class="section-label">Standardpriser</p>
+  <div class="card">
+    <div class="info-row"><span>Filament (PLA / PLA Matte / PETG-HF)</span><span>180,25 DKK/kg</span></div>
+    <div class="info-row"><span>Strøm</span><span>3,00 DKK/kWh</span></div>
+    <div class="info-row"><span>Printerforbrug</span><span>100 W</span></div>
+    <div class="info-row"><span>Markup</span><span>300%</span></div>
+    <div class="info-row"><span>Minimumspris</span><span>30,00 DKK</span></div>
+    <div class="formula">
+      <code>kostpris</code> = filament (g) × 0,18025 + printtid (t) × 0,1 × strømpris<br>
+      <code>salgspris</code> = max(kostpris × 3, 30 DKK)
+    </div>
+  </div>
 
-      function formatDKK(amount) {
-        return amount.toLocaleString("da-DK", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        });
-      }
+  <!-- Disclaimer -->
+  <p class="section-label">Bemærk</p>
+  <div class="disclaimer">
+    Prisen på denne side er et estimat baseret på et enkelt element. For en præcis pris eller ved større ordrer, kontakt mig direkte for et godt tilbud.
+    <br><br>
+    3D print er opbygget af mange lag, og der kan forekomme små overfladefejl. Resultatet er næsten altid perfekt, men meget komplekse modeller kan påvirke det endelige resultat. Hvis printet vurderes at være i dårlig stand, printes det om uden beregning.
+    <br><br>
+    Prisberegneren er baseret på standardfilament (PLA / PLA Matte / PETG-HF). Ved print i flere farver eller mere eksotiske filaments som f.eks. glow-in-the-dark, carbon fiber eller silk vil prisen ændre sig markant.
+  </div>
 
-      function beregnPris() {
-        let filament =
-          parseFloat(document.getElementById("filament").value) || 0;
-        let printtid =
-          parseFloat(document.getElementById("printtid").value) || 0;
+</main>
 
-        let filamentPrisKg =
-          parseFloat(document.getElementById("filamentPris").value) || 180.25;
-        let stromPrisPrKWh =
-          parseFloat(document.getElementById("stromPris").value) || 3;
-        let printerForbrugKW = 0.1;
-        let markup = 3;
-        let minPris = 30;
+<script>
+  let printNavn = '';
 
-        let filamentPrisPrGram = filamentPrisKg / 1000;
-        let filamentOmkostning = filament * filamentPrisPrGram;
-        let stromOmkostning = printtid * printerForbrugKW * stromPrisPrKWh;
-        let totalOmkostning = filamentOmkostning + stromOmkostning;
-        let salgsPris = totalOmkostning * markup;
-        let endeligPris = Math.max(salgsPris, minPris);
+  // ── Theme ──
+  function initTheme() {
+    const stored = localStorage.getItem('y3dp-theme');
+    const pref   = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    setTheme(stored || pref);
+  }
+  function setTheme(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    document.getElementById('themeToggle').textContent = t === 'dark' ? '☀️' : '🌙';
+  }
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    localStorage.setItem('y3dp-theme', next);
+  });
 
-        const navnTekst = printNavn ? ` for <strong>${printNavn}</strong>` : "";
-        const oprindeligPrisTekst =
-          salgsPris < minPris
-            ? ` (oprindelig pris: ${formatDKK(salgsPris)} DKK)`
-            : "";
-        document.getElementById("result").innerHTML =
-          `🛒 Din pris${navnTekst}: <strong>${formatDKK(
-            endeligPris
-          )} DKK</strong>${oprindeligPrisTekst}</div>`;
+  // ── Accordion ──
+  function toggleAccordion(id) {
+    const body    = document.getElementById(id + 'Body');
+    const trigger = document.getElementById(id + 'Toggle');
+    const isOpen  = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    trigger.setAttribute('aria-expanded', String(!isOpen));
+    const label = trigger.querySelector('span:first-child');
+    if (id === 'spec') {
+      label.textContent = isOpen ? 'Vis prisspecifikation' : 'Skjul prisspecifikation';
+      if (!isOpen) beregnPris();
+    } else {
+      label.textContent = isOpen ? 'Tilpas filament- og strømpris' : 'Skjul tilpasning';
+    }
+  }
 
-        opdaterSpecifikation({
-          filamentOmkostning,
-          stromOmkostning,
-          totalOmkostning,
-          salgsPris,
-          endeligPris,
-          navnTekst,
-          filamentPrisPrGram,
-          stromPrisPrKWh,
-          printerForbrugKW,
-          markup,
-          minPris,
-        });
-      }
+  // ── Format ──
+  function dkk(n) {
+    return n.toLocaleString('da-DK', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
 
-      function opdaterSpecifikation({
-        filamentOmkostning,
-        stromOmkostning,
-        totalOmkostning,
-        salgsPris,
-        endeligPris,
-        navnTekst,
-        filamentPrisPrGram,
-        stromPrisPrKWh,
-        printerForbrugKW,
-        markup,
-        minPris,
-      }) {
-        document.getElementById("prisSpecifikation").innerHTML = `
-          <h3>🧾 Pris-specifikation${navnTekst}</h3>
-          <ul>
-            <li>🧵 Filament: ${formatDKK(filamentOmkostning)} DKK</li>
-            <li>⚡ Strøm: ${formatDKK(stromOmkostning)} DKK</li>
-            <li>📦 Kostpris i alt: ${formatDKK(totalOmkostning)} DKK</li>
-            <li>📈 Markup: ${markup}× (salgspris: ${formatDKK(
-          salgsPris
-        )} DKK)</li>
-            <li>⏳ Minimumspris: ${formatDKK(minPris)} DKK</li>
-            <li>🛒 Endelig pris: ${formatDKK(endeligPris)} DKK</li>
-          </ul>
-          <p>
-            Beregning: filament (g) × ${formatDKK(
-              filamentPrisPrGram
-            )} DKK/g
-            + printtid (timer) × ${printerForbrugKW} kW × ${formatDKK(
-          stromPrisPrKWh
-        )} DKK/kWh
-          </p>
-        `;
-      }
+  // ── Calculate ──
+  function beregnPris() {
+    const filament  = parseFloat(document.getElementById('filament').value)     || 0;
+    const printtid  = parseFloat(document.getElementById('printtid').value)     || 0;
+    const filPrisKg = parseFloat(document.getElementById('filamentPris').value) || 180.25;
+    const strPris   = parseFloat(document.getElementById('stromPris').value)    || 3.0;
 
-      function toggleSpecifikation() {
-        const box = document.getElementById("prisSpecifikation");
-        const toggleButton = document.getElementById("specToggle");
-        const isHidden = box.hasAttribute("hidden");
-        if (isHidden) {
-          box.removeAttribute("hidden");
-          toggleButton.textContent = "Skjul pris-specifikation";
-          beregnPris();
-        } else {
-          box.setAttribute("hidden", "");
-          toggleButton.textContent = "Vis pris-specifikation";
-        }
-      }
+    const prGram    = filPrisKg / 1000;
+    const filKost   = filament * prGram;
+    const strKost   = printtid * 0.1 * strPris;
+    const kostpris  = filKost + strKost;
+    const salgspris = kostpris * 3;
+    const endelig   = Math.max(salgspris, 30);
 
-      function togglePrisOverstyring() {
-        const box = document.getElementById("prisOverstyring");
-        const toggleButton = document.getElementById("overrideToggle");
-        const isHidden = box.hasAttribute("hidden");
-        if (isHidden) {
-          box.removeAttribute("hidden");
-          toggleButton.textContent = "Skjul valgfri pris-overstyring";
-        } else {
-          box.setAttribute("hidden", "");
-          toggleButton.textContent = "Vis valgfri pris-overstyring";
-        }
-      }
+    const label = document.getElementById('resultLabel');
+    const price = document.getElementById('resultPrice');
+    const note  = document.getElementById('resultMinNote');
 
-      function prefillFraQuery() {
-        const params = new URLSearchParams(window.location.search);
-        const filamentParam = params.get("filament");
-        const timeParam = params.get("printtid") || params.get("timer");
-        const navnParam = params.get("navn") || params.get("name");
+    if (filament === 0 && printtid === 0) {
+      label.textContent = 'Indtast værdier ovenfor';
+      price.innerHTML   = '— <span class="currency">DKK</span>';
+      note.textContent  = '';
+    } else {
+      label.textContent = printNavn ? 'Pris for ' + printNavn : 'Din pris';
+      price.innerHTML   = dkk(endelig) + ' <span class="currency">DKK</span>';
+      note.textContent  = salgspris < 30 ? 'Justeret op til minimumspris (beregnet: ' + dkk(salgspris) + ' DKK)' : '';
+    }
 
-        if (filamentParam !== null) {
-          document.getElementById("filament").value = filamentParam;
-        }
-        if (timeParam !== null) {
-          document.getElementById("printtid").value = timeParam;
-        }
-        if (navnParam !== null) {
-          printNavn = navnParam;
-          document.getElementById("navnDisplay").innerHTML =
-            `Prisestimat for: <strong>${printNavn}</strong>`;
-        }
-        if (filamentParam !== null || timeParam !== null) {
-          beregnPris();
-        }
-      }
+    // Spec table
+    const tbody = document.querySelector('#specTable tbody');
+    tbody.innerHTML = [
+      ['Filamentomkostning', dkk(filKost) + ' DKK'],
+      ['Strømomkostning',    dkk(strKost) + ' DKK'],
+      ['Kostpris i alt',     dkk(kostpris) + ' DKK', 'total'],
+      ['Markup (300%)',      '× 3 = ' + dkk(salgspris) + ' DKK'],
+      ['Endelig pris',       dkk(endelig) + ' DKK', 'final'],
+    ].map(([k, v, cls]) =>
+      `<tr class="${cls || ''}"><td>${k}</td><td>${v}</td></tr>`
+    ).join('');
+  }
 
-      document.addEventListener("DOMContentLoaded", () => {
-        initTheme();
-        prefillFraQuery();
-      });
-    </script>
-  </body>
+  // ── Share estimate ──
+  function delEstimat() {
+    const filament = document.getElementById('filament').value;
+    const printtid = document.getElementById('printtid').value;
+    if (!filament && !printtid) return;
+
+    const params = new URLSearchParams();
+    if (filament) params.set('filament', filament);
+    if (printtid) params.set('printtid', printtid);
+    if (printNavn) params.set('navn', printNavn);
+
+    const url = window.location.origin + window.location.pathname + '?' + params.toString();
+
+    function onCopied() {
+      const btn  = document.getElementById('shareBtn');
+      const icon = document.getElementById('shareBtnIcon');
+      const text = document.getElementById('shareBtnText');
+      btn.classList.add('copied');
+      icon.textContent = '✓';
+      text.textContent = 'Link kopieret!';
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        icon.textContent = '🔗';
+        text.textContent = 'Kopiér estimat-link';
+      }, 2500);
+    }
+
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(url).then(onCopied);
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = url;
+      ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      onCopied();
+    }
+  }
+
+  // ── URL prefill ──
+  function prefillFraQuery() {
+    const p = new URLSearchParams(window.location.search);
+    const f = p.get('filament');
+    const t = p.get('printtid') || p.get('timer');
+    const n = p.get('navn')     || p.get('name');
+    if (f) document.getElementById('filament').value = f;
+    if (t) document.getElementById('printtid').value = t;
+    if (n) {
+      printNavn = n;
+      const notice = document.getElementById('prefillNotice');
+      notice.textContent = 'Prisestimat for: ' + n;
+      notice.removeAttribute('hidden');
+    }
+    if (f || t) beregnPris();
+  }
+
+  initTheme();
+  prefillFraQuery();
+</script>
+</body>
 </html>
